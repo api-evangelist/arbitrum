@@ -197,6 +197,8 @@ common:
     url: https://discord.gg/arbitrum
   - type: Blog
     url: https://medium.com/offchainlabs
+  - type: LLMsTxt
+    url: https://docs.arbitrum.io/llms.txt
 integrations:
   - name: Ethereum
   - name: Alchemy
