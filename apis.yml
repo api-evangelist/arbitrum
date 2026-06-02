@@ -21,7 +21,7 @@ tags:
   - Orbit
   - Bridge
 created: '2026-05-23'
-modified: '2026-05-23'
+modified: '2026-05-29'
 specificationVersion: '0.19'
 apis:
   - aid: arbitrum:one-rpc
@@ -42,6 +42,8 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+      - type: AsyncAPI
+        url: https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
   - aid: arbitrum:nova-rpc
     name: Arbitrum Nova JSON-RPC
     description: >-
@@ -57,6 +59,8 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+      - type: AsyncAPI
+        url: https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
   - aid: arbitrum:sepolia-rpc
     name: Arbitrum Sepolia JSON-RPC
     description: >-
@@ -71,6 +75,8 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+      - type: AsyncAPI
+        url: https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
   - aid: arbitrum:bridge
     name: Arbitrum Bridge
     description: >-

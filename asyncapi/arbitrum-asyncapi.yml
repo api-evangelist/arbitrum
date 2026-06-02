@@ -1,0 +1,676 @@
+asyncapi: '2.6.0'
+id: 'urn:com:arbitrum:public-wss'
+info:
+  title: Arbitrum Public WebSocket APIs
+  version: '1.0.0'
+  description: >-
+    AsyncAPI description of the WebSocket surface that Arbitrum exposes from
+    publicly documented endpoints.
+
+
+    ## Important scope notes (from Arbitrum docs)
+
+
+    Arbitrum's public RPC endpoints — `arb1.arbitrum.io/rpc`,
+    `nova.arbitrum.io/rpc`, and `sepolia-rollup.arbitrum.io/rpc` — **do not
+    expose JSON-RPC over WebSockets**. The Arbitrum documentation states
+    explicitly: "Arbitrum public RPCs do not provide Websocket support."
+    Production teams use Alchemy, QuickNode, Infura, Chainstack, dRPC, Ankr,
+    Allnodes, or a self-hosted Nitro node to obtain a WSS JSON-RPC endpoint.
+
+
+    The *only* WebSocket interface Arbitrum publishes on its own domains is the
+    **Nitro Sequencer Feed**, a public, read-only broadcast of ordered
+    `BroadcastFeedMessage` envelopes. This document describes:
+
+
+      1. The Nitro Sequencer Feed channels (`arb1`, `nova`, `sepolia`).
+      2. The `eth_subscribe` channels that work against an Arbitrum Nitro
+         JSON-RPC WebSocket *when one is available* (self-hosted node or
+         third-party provider). These are included so consumers can model the
+         message shape with Arbitrum's documented block extensions
+         (`l1BlockNumber`, `sendRoot`, `sendCount`, modified `mixHash`,
+         fixed `difficulty` / `gasLimit`, custom transaction types).
+
+
+    ## eth_subscribe support on Arbitrum Nitro
+
+
+      * `newHeads` — supported. Blocks include the Arbitrum-specific fields
+        documented under "RPC methods" (`l1BlockNumber`, `sendRoot`,
+        `sendCount`, `extraData == sendRoot`, mixed `mixHash`, fixed
+        `difficulty` / `gasLimit`).
+      * `logs` — supported.
+      * `newPendingTransactions` — Arbitrum has a single centralized Sequencer
+        and orders transactions on receipt; there is no public mempool, so the
+        practical utility differs from L1 Ethereum. The subscription topic is
+        accepted by Nitro for compatibility but does not surface a mempool the
+        way Ethereum does.
+      * `syncing` — accepted by Nitro for go-ethereum compatibility.
+
+
+    No `arb_subscribe` family of methods is documented by Offchain Labs at the
+    time of writing.
+  contact:
+    name: API Evangelist
+    url: https://apievangelist.com
+    email: kin@apievangelist.com
+  license:
+    name: Arbitrum docs (CC-BY)
+    url: https://docs.arbitrum.io
+  tags:
+    - name: arbitrum
+    - name: nitro
+    - name: layer-2
+    - name: sequencer-feed
+    - name: json-rpc
+    - name: websocket
+
+defaultContentType: application/json
+
+servers:
+  arb1-feed:
+    url: arb1-feed.arbitrum.io/feed
+    protocol: wss
+    description: >-
+      Public Nitro Sequencer broadcast feed for Arbitrum One mainnet
+      (chain ID 42161). Read-only stream of ordered `BroadcastFeedMessage`
+      envelopes. The `blockNumber` carried inside messages refers to the
+      parent-chain (L1) block; L2 block number is computed as
+      `genesisBlockNumber + sequenceNumber` (Arbitrum One genesis is
+      22207817).
+  nova-feed:
+    url: nova-feed.arbitrum.io/feed
+    protocol: wss
+    description: >-
+      Public Nitro Sequencer broadcast feed for Arbitrum Nova (chain ID 42170,
+      AnyTrust DAC chain).
+  sepolia-feed:
+    url: sepolia-rollup.arbitrum.io/feed
+    protocol: wss
+    description: >-
+      Public Nitro Sequencer broadcast feed for Arbitrum Sepolia testnet
+      (chain ID 421614).
+  nitro-rpc-ws:
+    url: '{host}'
+    protocol: wss
+    description: >-
+      Generic JSON-RPC WebSocket endpoint exposed by a self-hosted Nitro node
+      or a third-party provider (Alchemy, QuickNode, Infura, Chainstack, dRPC,
+      Ankr, Allnodes). Arbitrum's own public RPC hosts
+      (`arb1.arbitrum.io/rpc`, `nova.arbitrum.io/rpc`,
+      `sepolia-rollup.arbitrum.io/rpc`) do not accept WebSocket upgrades.
+    variables:
+      host:
+        description: Provider- or operator-supplied WSS host and path.
+        default: arb-mainnet.g.alchemy.com/v2/YOUR_KEY
+
+channels:
+  /feed/arb1:
+    servers:
+      - arb1-feed
+    description: >-
+      Nitro Sequencer broadcast feed for Arbitrum One. The connection is a
+      raw WebSocket; each text frame is a JSON `BroadcastMessage`.
+    subscribe:
+      operationId: receiveArb1SequencerFeed
+      summary: Receive ordered sequencer broadcast messages from Arbitrum One.
+      message:
+        $ref: '#/components/messages/BroadcastMessage'
+  /feed/nova:
+    servers:
+      - nova-feed
+    description: Nitro Sequencer broadcast feed for Arbitrum Nova.
+    subscribe:
+      operationId: receiveNovaSequencerFeed
+      summary: Receive ordered sequencer broadcast messages from Arbitrum Nova.
+      message:
+        $ref: '#/components/messages/BroadcastMessage'
+  /feed/sepolia:
+    servers:
+      - sepolia-feed
+    description: Nitro Sequencer broadcast feed for Arbitrum Sepolia testnet.
+    subscribe:
+      operationId: receiveSepoliaSequencerFeed
+      summary: Receive ordered sequencer broadcast messages from Arbitrum Sepolia.
+      message:
+        $ref: '#/components/messages/BroadcastMessage'
+
+  eth_subscribe/newHeads:
+    servers:
+      - nitro-rpc-ws
+    description: >-
+      `eth_subscribe("newHeads")` on a Nitro JSON-RPC WebSocket. Emits a
+      notification for every new L2 head produced by the Sequencer. Blocks
+      include Arbitrum-specific fields (`l1BlockNumber`, `sendRoot`,
+      `sendCount`, modified `mixHash`, fixed `difficulty` / `gasLimit`).
+    publish:
+      operationId: subscribeNewHeads
+      summary: Open a `newHeads` subscription.
+      message:
+        $ref: '#/components/messages/JsonRpcSubscribeRequestNewHeads'
+    subscribe:
+      operationId: receiveNewHeads
+      summary: Receive `eth_subscription` notifications for new heads.
+      message:
+        $ref: '#/components/messages/EthSubscriptionNewHead'
+
+  eth_subscribe/logs:
+    servers:
+      - nitro-rpc-ws
+    description: >-
+      `eth_subscribe("logs", {address, topics})` on a Nitro JSON-RPC
+      WebSocket. Emits a notification for each log matching the supplied
+      address/topics filter.
+    publish:
+      operationId: subscribeLogs
+      summary: Open a `logs` subscription with an address/topics filter.
+      message:
+        $ref: '#/components/messages/JsonRpcSubscribeRequestLogs'
+    subscribe:
+      operationId: receiveLogs
+      summary: Receive `eth_subscription` notifications for matching logs.
+      message:
+        $ref: '#/components/messages/EthSubscriptionLog'
+
+  eth_subscribe/newPendingTransactions:
+    servers:
+      - nitro-rpc-ws
+    description: >-
+      `eth_subscribe("newPendingTransactions")`. Accepted by Nitro for
+      go-ethereum compatibility, but Arbitrum's centralized Sequencer orders
+      transactions on receipt — there is no public mempool, so the stream is
+      effectively empty / of limited use compared to L1 Ethereum.
+    publish:
+      operationId: subscribeNewPendingTransactions
+      summary: Open a `newPendingTransactions` subscription.
+      message:
+        $ref: '#/components/messages/JsonRpcSubscribeRequestNewPendingTxs'
+    subscribe:
+      operationId: receiveNewPendingTransactions
+      summary: Receive pending transaction hash notifications.
+      message:
+        $ref: '#/components/messages/EthSubscriptionPendingTxHash'
+
+  eth_subscribe/syncing:
+    servers:
+      - nitro-rpc-ws
+    description: >-
+      `eth_subscribe("syncing")`. Accepted by Nitro for go-ethereum
+      compatibility. Notifications reflect the local node's sync status.
+    publish:
+      operationId: subscribeSyncing
+      summary: Open a `syncing` subscription.
+      message:
+        $ref: '#/components/messages/JsonRpcSubscribeRequestSyncing'
+    subscribe:
+      operationId: receiveSyncing
+      summary: Receive `syncing` status notifications.
+      message:
+        $ref: '#/components/messages/EthSubscriptionSyncing'
+
+components:
+  messages:
+    BroadcastMessage:
+      name: BroadcastMessage
+      title: Nitro Sequencer Broadcast Envelope
+      summary: >-
+        Top-level envelope emitted by the Nitro Sequencer feed broadcaster.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/BroadcastMessage'
+
+    JsonRpcSubscribeRequestNewHeads:
+      name: JsonRpcSubscribeRequestNewHeads
+      title: eth_subscribe newHeads request
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcRequest'
+          - type: object
+            properties:
+              method:
+                const: eth_subscribe
+              params:
+                type: array
+                minItems: 1
+                maxItems: 1
+                items:
+                  - const: newHeads
+
+    JsonRpcSubscribeRequestLogs:
+      name: JsonRpcSubscribeRequestLogs
+      title: eth_subscribe logs request
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcRequest'
+          - type: object
+            properties:
+              method:
+                const: eth_subscribe
+              params:
+                type: array
+                minItems: 1
+                maxItems: 2
+                items:
+                  - const: logs
+                  - $ref: '#/components/schemas/LogsFilter'
+
+    JsonRpcSubscribeRequestNewPendingTxs:
+      name: JsonRpcSubscribeRequestNewPendingTxs
+      title: eth_subscribe newPendingTransactions request
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcRequest'
+          - type: object
+            properties:
+              method:
+                const: eth_subscribe
+              params:
+                type: array
+                minItems: 1
+                maxItems: 2
+                items:
+                  - const: newPendingTransactions
+                  - type: boolean
+                    description: >-
+                      Optional boolean. If true, emit full transaction objects
+                      instead of just hashes (provider-dependent).
+
+    JsonRpcSubscribeRequestSyncing:
+      name: JsonRpcSubscribeRequestSyncing
+      title: eth_subscribe syncing request
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcRequest'
+          - type: object
+            properties:
+              method:
+                const: eth_subscribe
+              params:
+                type: array
+                minItems: 1
+                maxItems: 1
+                items:
+                  - const: syncing
+
+    EthSubscriptionNewHead:
+      name: EthSubscriptionNewHead
+      title: eth_subscription notification — newHeads
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcSubscriptionNotification'
+          - type: object
+            properties:
+              params:
+                type: object
+                properties:
+                  subscription:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/ArbitrumBlockHeader'
+
+    EthSubscriptionLog:
+      name: EthSubscriptionLog
+      title: eth_subscription notification — logs
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcSubscriptionNotification'
+          - type: object
+            properties:
+              params:
+                type: object
+                properties:
+                  subscription:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/Log'
+
+    EthSubscriptionPendingTxHash:
+      name: EthSubscriptionPendingTxHash
+      title: eth_subscription notification — pending tx hash
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcSubscriptionNotification'
+          - type: object
+            properties:
+              params:
+                type: object
+                properties:
+                  subscription:
+                    type: string
+                  result:
+                    type: string
+                    pattern: '^0x[0-9a-fA-F]{64}$'
+                    description: 32-byte transaction hash.
+
+    EthSubscriptionSyncing:
+      name: EthSubscriptionSyncing
+      title: eth_subscription notification — syncing
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/JsonRpcSubscriptionNotification'
+          - type: object
+            properties:
+              params:
+                type: object
+                properties:
+                  subscription:
+                    type: string
+                  result:
+                    oneOf:
+                      - type: boolean
+                        description: false when not syncing.
+                      - type: object
+                        properties:
+                          syncing:
+                            type: boolean
+                          status:
+                            type: object
+                            additionalProperties: true
+
+  schemas:
+    JsonRpcRequest:
+      type: object
+      required:
+        - jsonrpc
+        - id
+        - method
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id:
+          oneOf:
+            - type: integer
+            - type: string
+        method:
+          type: string
+        params:
+          type: array
+
+    JsonRpcSubscribeResponse:
+      type: object
+      required:
+        - jsonrpc
+        - id
+        - result
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id:
+          oneOf:
+            - type: integer
+            - type: string
+        result:
+          type: string
+          description: Subscription ID (hex-encoded) returned by the node.
+
+    JsonRpcSubscriptionNotification:
+      type: object
+      required:
+        - jsonrpc
+        - method
+        - params
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        method:
+          type: string
+          const: eth_subscription
+        params:
+          type: object
+          required:
+            - subscription
+            - result
+          properties:
+            subscription:
+              type: string
+              description: The subscription ID this notification belongs to.
+            result:
+              description: Subscription-specific payload.
+
+    LogsFilter:
+      type: object
+      properties:
+        address:
+          oneOf:
+            - type: string
+              pattern: '^0x[0-9a-fA-F]{40}$'
+            - type: array
+              items:
+                type: string
+                pattern: '^0x[0-9a-fA-F]{40}$'
+        topics:
+          type: array
+          maxItems: 4
+          items:
+            oneOf:
+              - type: 'null'
+              - type: string
+                pattern: '^0x[0-9a-fA-F]{64}$'
+              - type: array
+                items:
+                  type: string
+                  pattern: '^0x[0-9a-fA-F]{64}$'
+
+    ArbitrumBlockHeader:
+      type: object
+      description: >-
+        Block header as returned by an Arbitrum Nitro node. Extends the
+        Ethereum block header with Arbitrum-specific fields documented under
+        "RPC methods" in the Arbitrum developer docs.
+      properties:
+        number:
+          type: string
+          description: L2 block number (hex).
+        hash:
+          type: string
+          pattern: '^0x[0-9a-fA-F]{64}$'
+        parentHash:
+          type: string
+          pattern: '^0x[0-9a-fA-F]{64}$'
+        nonce:
+          type: string
+        sha3Uncles:
+          type: string
+        logsBloom:
+          type: string
+        transactionsRoot:
+          type: string
+        stateRoot:
+          type: string
+        receiptsRoot:
+          type: string
+        miner:
+          type: string
+        difficulty:
+          type: string
+          const: '0x1'
+          description: Fixed at 0x1 on Arbitrum.
+        totalDifficulty:
+          type: string
+        extraData:
+          type: string
+          description: >-
+            On Arbitrum, `extraData` is equivalent to `sendRoot` — the Merkle
+            root of the outbox tree state.
+        size:
+          type: string
+        gasLimit:
+          type: string
+          const: '0x4000000000000'
+          description: Fixed at 0x4000000000000 on Arbitrum.
+        gasUsed:
+          type: string
+        timestamp:
+          type: string
+        transactions:
+          type: array
+          items:
+            type: string
+        uncles:
+          type: array
+          items:
+            type: string
+        mixHash:
+          type: string
+          description: >-
+            On Arbitrum, the first 8 bytes mirror `sendCount` and the second
+            8 bytes mirror `l1BlockNumber`.
+        l1BlockNumber:
+          type: string
+          description: >-
+            Arbitrum-specific. Approximate block number of the first
+            non-Arbitrum ancestor chain (Ethereum L1 for Arbitrum One / Nova /
+            Sepolia) that occurred before this child-chain block.
+        sendRoot:
+          type: string
+          description: >-
+            Arbitrum-specific. Merkle root of the outbox tree state. Equal
+            to `extraData`.
+        sendCount:
+          type: string
+          description: >-
+            Arbitrum-specific. Number of child-to-parent chain messages since
+            Nitro genesis.
+
+    Log:
+      type: object
+      properties:
+        address:
+          type: string
+        topics:
+          type: array
+          items:
+            type: string
+        data:
+          type: string
+        blockNumber:
+          type: string
+        transactionHash:
+          type: string
+        transactionIndex:
+          type: string
+        blockHash:
+          type: string
+        logIndex:
+          type: string
+        removed:
+          type: boolean
+
+    BroadcastMessage:
+      type: object
+      description: >-
+        Top-level Sequencer feed envelope (Go: `broadcaster/message.BroadcastMessage`).
+        Fields use `omitempty`; the feed is forward-compatible and may add
+        fields without breaking clients.
+      required:
+        - version
+      properties:
+        version:
+          type: integer
+          description: Broadcast protocol version.
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/BroadcastFeedMessage'
+        confirmedSequenceNumberMessage:
+          $ref: '#/components/schemas/ConfirmedSequenceNumberMessage'
+
+    BroadcastFeedMessage:
+      type: object
+      description: >-
+        A single ordered Sequencer message.
+      properties:
+        sequenceNumber:
+          type: integer
+          description: >-
+            Monotonic message index. For Arbitrum One, the L2 block number
+            equals `22207817 + sequenceNumber` (genesis offset).
+        message:
+          $ref: '#/components/schemas/MessageWithMetadata'
+        blockHash:
+          type: string
+          pattern: '^0x[0-9a-fA-F]{64}$'
+          description: Optional associated L2 block hash.
+        signature:
+          type: string
+          description: Legacy / nullable signature field.
+        signatureV2:
+          type: string
+          description: >-
+            Current signature over (chainId, sequenceNumber, blockHash,
+            blockMetadata, message).
+        blockMetadata:
+          type: string
+          description: Optional opaque block-related metadata blob.
+
+    MessageWithMetadata:
+      type: object
+      description: >-
+        Carries the L1IncomingMessage plus delayed-message bookkeeping.
+      properties:
+        message:
+          $ref: '#/components/schemas/L1IncomingMessage'
+        delayedMessagesRead:
+          type: integer
+
+    L1IncomingMessage:
+      type: object
+      description: >-
+        Inbox-message envelope: a header plus the L2 message bytes
+        (decodable with Nitro's `ParseL2Transactions`).
+      properties:
+        header:
+          $ref: '#/components/schemas/L1IncomingMessageHeader'
+        l2Msg:
+          type: string
+          description: Base64- or hex-encoded L2 message bytes.
+
+    L1IncomingMessageHeader:
+      type: object
+      properties:
+        kind:
+          type: integer
+          description: >-
+            Message kind. Maps to Arbitrum transaction types — e.g. 100
+            (`ArbitrumDepositTx`, 0x64), 101 (`ArbitrumUnsignedTx`, 0x65),
+            102 (`ArbitrumContractTx`, 0x66), 104 (`ArbitrumRetryTx`, 0x68),
+            105 (`ArbitrumSubmitRetryableTx`, 0x6A), 106
+            (`ArbitrumInternalTx`, 0x6B).
+        sender:
+          type: string
+          pattern: '^0x[0-9a-fA-F]{40}$'
+        blockNumber:
+          type: integer
+          description: >-
+            Parent-chain (L1) block number at which this inbox message was
+            posted — NOT the L2 block number.
+        timestamp:
+          type: integer
+          description: Parent-chain (L1) timestamp.
+        requestId:
+          type: string
+          description: >-
+            Parent-to-child inbox queue position. Surfaces on cross-chain
+            transactions.
+        baseFeeL1:
+          type: string
+          description: Parent-chain base fee at the time of inclusion.
+
+    ConfirmedSequenceNumberMessage:
+      type: object
+      properties:
+        sequenceNumber:
+          type: integer
+          description: Highest sequencer number confirmed at this point in the stream.
