@@ -1,0 +1,234 @@
+{
+  "item": [
+    {
+      "id": "de8be70d-5f30-4404-a10f-57e258199bf5",
+      "name": "JSON-RPC",
+      "description": {
+        "content": "Ethereum-compatible JSON-RPC 2.0 endpoint",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3a24b1c5-c750-4e6e-8538-70b342dc3e86",
+          "name": "Invoke a JSON-RPC method",
+          "request": {
+            "name": "Invoke a JSON-RPC method",
+            "description": {
+              "content": "Single entry point for all JSON-RPC calls. The HTTP body is a JSON-RPC 2.0\nrequest object (or a batch array). Common Ethereum methods include\neth_blockNumber, eth_chainId, eth_getBalance, eth_getTransactionByHash,\neth_getTransactionReceipt, eth_call, eth_estimateGas,\neth_sendRawTransaction, eth_getLogs. Arbitrum-specific methods include\narb_getL1Confirmations and various nodeinterface precompile calls.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"<string>\",\n  \"method\": \"<string>\",\n  \"id\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "26149b11-7d26-4acd-9516-98c899fe3eb0",
+              "name": "JSON-RPC response (or batch)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"eth_blockNumber\",\n  \"params\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"jsonrpc\": \"string\",\n  \"id\": 8922,\n  \"result\": \"\",\n  \"error\": {\n    \"code\": 6902,\n    \"message\": \"string\",\n    \"data\": \"\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af86ecd9-1c3d-4826-82ec-7b331a3fe039",
+              "name": "Malformed JSON-RPC request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"eth_blockNumber\",\n  \"params\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8d215d3b-198f-4940-b472-bd788dfff371",
+              "name": "Rate limited by the public RPC endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"eth_blockNumber\",\n  \"params\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "70a7b2aa-5455-45db-b4e2-42c68b2b56c0",
+              "name": "Internal RPC error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"eth_blockNumber\",\n  \"params\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://arb1.arbitrum.io/rpc",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0d4cfb12-ffa7-4b39-8beb-351e763ff3f8",
+    "name": "Arbitrum JSON-RPC API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public JSON-RPC endpoints for the Arbitrum One, Arbitrum Nova, and Arbitrum\nSepolia chains. The Arbitrum chains implement the standard Ethereum JSON-RPC\ninterface (eth_*, net_*, web3_*) and add Arbitrum-specific precompiles and\nextended methods (arb_*, arbtrace_*, debug_*).\n\nAll requests are POST with a JSON body following the JSON-RPC 2.0 envelope.\nPublic RPC endpoints do not support WebSockets and IPv6 is not supported.\nSequencer-only endpoints accept only eth_sendRawTransaction and\neth_sendRawTransactionConditional.\n\nThis spec is a best-effort generation from public docs. See\nhttps://docs.arbitrum.io/build-decentralized-apps/reference/node-providers\nfor the source list.\n\n\nContact Support:\n Name: Offchain Labs / Arbitrum Foundation",
+      "type": "text/plain"
+    }
+  }
+}
