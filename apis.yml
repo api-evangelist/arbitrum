@@ -10,7 +10,7 @@ description: >-
   standard Ethereum JSON-RPC, the Stylus SDK for Rust / C / C++ smart contracts, the
   Arbitrum SDK for cross-chain messaging and bridging, and the Arbitrum Bridge for
   canonical asset transfer between Ethereum and Arbitrum chains.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Layer 2
   - Ethereum
