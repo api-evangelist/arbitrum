@@ -203,7 +203,7 @@ common:
     url: https://discord.gg/arbitrum
   - type: Blog
     url: https://medium.com/offchainlabs
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://docs.arbitrum.io/llms.txt
 integrations:
   - name: Ethereum
