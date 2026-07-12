@@ -183,6 +183,8 @@ apis:
       - type: Website
         url: https://arbiscan.io
 common:
+  - type: DomainSecurity
+    url: security/arbitrum-domain-security.yml
   - type: Website
     url: https://arbitrum.io
   - type: Foundation
