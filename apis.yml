@@ -183,6 +183,8 @@ apis:
       - type: Website
         url: https://arbiscan.io
 common:
+  - type: AgenticAccess
+    url: agentic-access/arbitrum-agentic-access.yml
   - type: DomainSecurity
     url: security/arbitrum-domain-security.yml
   - type: Website
