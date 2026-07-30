@@ -10,7 +10,19 @@ description: >-
   standard Ethereum JSON-RPC, the Stylus SDK for Rust / C / C++ smart contracts, the
   Arbitrum SDK for cross-chain messaging and bridging, and the Arbitrum Bridge for
   canonical asset transfer between Ethereum and Arbitrum chains.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: free
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Free
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/arbitrum.png
 tags:
   - Layer 2
   - Ethereum
@@ -24,164 +36,169 @@ created: '2026-05-23'
 modified: '2026-05-29'
 specificationVersion: '0.19'
 apis:
-  - aid: arbitrum:one-rpc
-    name: Arbitrum One JSON-RPC
-    description: >-
-      Public Ethereum JSON-RPC endpoint for Arbitrum One mainnet (chain ID 42161),
-      the flagship optimistic rollup secured directly by Ethereum L1. Supports
-      standard eth_* methods plus Arbitrum-specific precompiles for L1 messaging,
-      retryable tickets, and gas accounting. Public endpoint does not support
-      WebSockets — production teams use Alchemy, QuickNode, Infura, Chainstack, or
-      self-hosted Nitro nodes.
-    humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-    baseURL: https://arb1.arbitrum.io/rpc
-    tags:
-      - JSON-RPC
-      - Mainnet
-      - Arbitrum One
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-      - type: AsyncAPI
-        url: https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
-  - aid: arbitrum:nova-rpc
-    name: Arbitrum Nova JSON-RPC
-    description: >-
-      Public Ethereum JSON-RPC endpoint for Arbitrum Nova (chain ID 42170), an
-      AnyTrust chain with a Data Availability Committee for high-throughput, low-cost
-      transactions suited to gaming and social apps.
-    humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-    baseURL: https://nova.arbitrum.io/rpc
-    tags:
-      - JSON-RPC
-      - Nova
-      - AnyTrust
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-      - type: AsyncAPI
-        url: https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
-  - aid: arbitrum:sepolia-rpc
-    name: Arbitrum Sepolia JSON-RPC
-    description: >-
-      Public Ethereum JSON-RPC endpoint for the Arbitrum Sepolia testnet (chain ID
-      421614).
-    humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-    baseURL: https://sepolia-rollup.arbitrum.io/rpc
-    tags:
-      - JSON-RPC
-      - Testnet
-      - Sepolia
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-      - type: AsyncAPI
-        url: https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
-  - aid: arbitrum:bridge
-    name: Arbitrum Bridge
-    description: >-
-      Canonical cross-chain bridge for transferring ETH and ERC-20 tokens between
-      Ethereum L1, Arbitrum One, Arbitrum Nova, and connected Orbit chains. Bridge
-      operations and underlying token-bridge contracts are open-source.
-    humanURL: https://bridge.arbitrum.io
-    baseURL: https://bridge.arbitrum.io
-    tags:
-      - Bridge
-      - Cross-Chain
-      - Canonical
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/arbitrum-bridge/quickstart
-      - type: App
-        url: https://bridge.arbitrum.io
-      - type: Repository
-        url: https://github.com/OffchainLabs/token-bridge-contracts
-  - aid: arbitrum:sdk
-    name: Arbitrum SDK
-    description: >-
-      Official TypeScript SDK (@arbitrum/sdk) for cross-chain interactions — building
-      L1-to-L2 and L2-to-L1 messages, deposit and withdrawal flows, retryable
-      tickets, and gas estimation for Arbitrum chains.
-    humanURL: https://docs.arbitrum.io/sdk
-    baseURL: https://github.com/OffchainLabs/arbitrum-sdk
-    tags:
-      - SDK
-      - TypeScript
-      - Cross-Chain
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/sdk
-      - type: Repository
-        url: https://github.com/OffchainLabs/arbitrum-sdk
-  - aid: arbitrum:stylus-sdk
-    name: Stylus SDK (Rust)
-    description: >-
-      Stylus lets developers write EVM-compatible smart contracts in Rust, C, and
-      C++ that compile to WASM and run alongside Solidity contracts. The Rust SDK
-      provides storage primitives, host I/O, and macros for ABI compatibility.
-    humanURL: https://docs.arbitrum.io/stylus/gentle-introduction
-    baseURL: https://github.com/OffchainLabs/stylus-sdk-rs
-    tags:
-      - Stylus
-      - SDK
-      - Rust
-      - WASM
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/stylus/gentle-introduction
-      - type: Repository
-        url: https://github.com/OffchainLabs/stylus-sdk-rs
-  - aid: arbitrum:nitro
-    name: Arbitrum Nitro
-    description: >-
-      Open-source Nitro node implementation that runs Arbitrum One, Nova, and Orbit
-      chains. Includes the sequencer, batch poster, validator, and a fork of go-
-      ethereum patched for Arbitrum's execution layer.
-    humanURL: https://docs.arbitrum.io/how-arbitrum-works/inside-arbitrum-nitro
-    baseURL: https://github.com/OffchainLabs/nitro
-    tags:
-      - Node
-      - Nitro
-      - Sequencer
-      - Validator
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/how-arbitrum-works/inside-arbitrum-nitro
-      - type: Repository
-        url: https://github.com/OffchainLabs/nitro
-  - aid: arbitrum:orbit-sdk
-    name: Arbitrum Orbit SDK
-    description: >-
-      TypeScript SDK and tooling for deploying and operating Orbit chains — custom
-      Arbitrum L2 / L3 chains that settle to Arbitrum One, Nova, or other Orbit
-      chains.
-    humanURL: https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction
-    baseURL: https://github.com/OffchainLabs/arbitrum-orbit-sdk
-    tags:
-      - Orbit
-      - SDK
-      - Appchains
-    properties:
-      - type: Documentation
-        url: https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction
-      - type: Repository
-        url: https://github.com/OffchainLabs/arbitrum-orbit-sdk
-  - aid: arbitrum:arbiscan-explorer
-    name: Arbiscan Block Explorer
-    description: >-
-      Etherscan-family block explorer for Arbitrum One, Nova, and Sepolia with a
-      public REST API for contracts, transactions, and addresses.
-    humanURL: https://arbiscan.io
-    baseURL: https://api.arbiscan.io/api
-    tags:
-      - Block Explorer
-      - Arbiscan
-      - API
-    properties:
-      - type: Documentation
-        url: https://docs.arbiscan.io
-      - type: Website
-        url: https://arbiscan.io
+- aid: arbitrum:one-rpc
+  name: Arbitrum One JSON-RPC
+  description: >-
+    Public Ethereum JSON-RPC endpoint for Arbitrum One mainnet (chain ID 42161), the flagship optimistic
+    rollup secured directly by Ethereum L1. Supports standard eth_* methods plus Arbitrum-specific precompiles
+    for L1 messaging, retryable tickets, and gas accounting. Public endpoint does not support WebSockets
+    — production teams use Alchemy, QuickNode, Infura, Chainstack, or self-hosted Nitro nodes.
+  humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  baseURL: https://arb1.arbitrum.io/rpc
+  tags:
+  - JSON-RPC
+  - Mainnet
+  - Arbitrum One
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
+- aid: arbitrum:nova-rpc
+  name: Arbitrum Nova JSON-RPC
+  description: >-
+    Public Ethereum JSON-RPC endpoint for Arbitrum Nova (chain ID 42170), an AnyTrust chain with a Data
+    Availability Committee for high-throughput, low-cost transactions suited to gaming and social apps.
+  humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  baseURL: https://nova.arbitrum.io/rpc
+  tags:
+  - JSON-RPC
+  - Nova
+  - AnyTrust
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
+- aid: arbitrum:sepolia-rpc
+  name: Arbitrum Sepolia JSON-RPC
+  description: Public Ethereum JSON-RPC endpoint for the Arbitrum Sepolia testnet (chain ID 421614).
+  humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  baseURL: https://sepolia-rollup.arbitrum.io/rpc
+  tags:
+  - JSON-RPC
+  - Testnet
+  - Sepolia
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/arbitrum/refs/heads/main/asyncapi/arbitrum-asyncapi.yml
+- aid: arbitrum:bridge
+  name: Arbitrum Bridge
+  description: >-
+    Canonical cross-chain bridge for transferring ETH and ERC-20 tokens between Ethereum L1, Arbitrum
+    One, Arbitrum Nova, and connected Orbit chains. Bridge operations and underlying token-bridge contracts
+    are open-source.
+  humanURL: https://bridge.arbitrum.io
+  baseURL: https://bridge.arbitrum.io
+  tags:
+  - Bridge
+  - Cross-Chain
+  - Canonical
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/arbitrum-bridge/quickstart
+  - type: App
+    url: https://bridge.arbitrum.io
+  - type: Repository
+    url: https://github.com/OffchainLabs/token-bridge-contracts
+- aid: arbitrum:sdk
+  name: Arbitrum SDK
+  description: >-
+    Official TypeScript SDK (@arbitrum/sdk) for cross-chain interactions — building L1-to-L2 and L2-to-L1
+    messages, deposit and withdrawal flows, retryable tickets, and gas estimation for Arbitrum chains.
+  humanURL: https://docs.arbitrum.io/sdk
+  baseURL: https://github.com/OffchainLabs/arbitrum-sdk
+  tags:
+  - SDK
+  - TypeScript
+  - Cross-Chain
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/sdk
+  - type: Repository
+    url: https://github.com/OffchainLabs/arbitrum-sdk
+- aid: arbitrum:stylus-sdk
+  name: Stylus SDK (Rust)
+  description: >-
+    Stylus lets developers write EVM-compatible smart contracts in Rust, C, and C++ that compile to WASM
+    and run alongside Solidity contracts. The Rust SDK provides storage primitives, host I/O, and macros
+    for ABI compatibility.
+  humanURL: https://docs.arbitrum.io/stylus/gentle-introduction
+  baseURL: https://github.com/OffchainLabs/stylus-sdk-rs
+  tags:
+  - Stylus
+  - SDK
+  - Rust
+  - WASM
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/stylus/gentle-introduction
+  - type: Repository
+    url: https://github.com/OffchainLabs/stylus-sdk-rs
+- aid: arbitrum:nitro
+  name: Arbitrum Nitro
+  description: >-
+    Open-source Nitro node implementation that runs Arbitrum One, Nova, and Orbit chains. Includes the
+    sequencer, batch poster, validator, and a fork of go- ethereum patched for Arbitrum's execution layer.
+  humanURL: https://docs.arbitrum.io/how-arbitrum-works/inside-arbitrum-nitro
+  baseURL: https://github.com/OffchainLabs/nitro
+  tags:
+  - Node
+  - Nitro
+  - Sequencer
+  - Validator
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/how-arbitrum-works/inside-arbitrum-nitro
+  - type: Repository
+    url: https://github.com/OffchainLabs/nitro
+- aid: arbitrum:orbit-sdk
+  name: Arbitrum Orbit SDK
+  description: >-
+    TypeScript SDK and tooling for deploying and operating Orbit chains — custom Arbitrum L2 / L3 chains
+    that settle to Arbitrum One, Nova, or other Orbit chains.
+  humanURL: https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction
+  baseURL: https://github.com/OffchainLabs/arbitrum-orbit-sdk
+  tags:
+  - Orbit
+  - SDK
+  - Appchains
+  properties:
+  - type: Documentation
+    url: https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction
+  - type: Repository
+    url: https://github.com/OffchainLabs/arbitrum-orbit-sdk
+- aid: arbitrum:arbiscan-explorer
+  name: Arbiscan Block Explorer
+  description: >-
+    Etherscan-family block explorer for Arbitrum One, Nova, and Sepolia with a public REST API for contracts,
+    transactions, and addresses.
+  humanURL: https://arbiscan.io
+  baseURL: https://api.arbiscan.io/api
+  tags:
+  - Block Explorer
+  - Arbiscan
+  - API
+  properties:
+  - type: Documentation
+    url: https://docs.arbiscan.io
+  - type: Website
+    url: https://arbiscan.io
+- aid: arbitrum:arbitrum-json-rpc-api
+  name: Arbitrum JSON-RPC API
+  description: Ethereum-compatible JSON-RPC 2.0 endpoint
+  humanURL: https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
+  baseURL: https://arb1.arbitrum.io/rpc
+  tags:
+  - JSON-RPC
+  properties:
+  - type: OpenAPI
+    url: openapi/arbitrum-json-rpc-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/arbitrum-agentic-access.yml
