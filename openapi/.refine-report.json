@@ -1,0 +1,14 @@
+{
+  "provider": "arbitrum",
+  "sources": [
+    "arbitrum-json-rpc-api-openapi.yml"
+  ],
+  "outputs": [
+    "arbitrum-json-rpc-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
