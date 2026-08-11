@@ -200,6 +200,13 @@ apis:
   - type: OpenAPI
     url: openapi/arbitrum-json-rpc-api-openapi.yml
 common:
+  - type: IssueTracker
+    url: https://github.com/OffchainLabs/token-bridge-contracts/issues
+  - type: Releases
+    url: https://github.com/OffchainLabs/token-bridge-contracts/releases
+  - type: License
+    name: Apache-2.0
+    url: https://github.com/OffchainLabs/token-bridge-contracts/blob/main/LICENSE
   - type: AgenticAccess
     url: agentic-access/arbitrum-agentic-access.yml
   - type: DomainSecurity
