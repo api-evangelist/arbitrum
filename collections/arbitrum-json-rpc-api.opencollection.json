@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Arbitrum JSON-RPC API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "JSON-RPC",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Invoke a JSON-RPC method",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://arb1.arbitrum.io/rpc/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Single entry point for all JSON-RPC calls. The HTTP body is a JSON-RPC 2.0\nrequest object (or a batch array). Common Ethereum methods include\neth_blockNumber, eth_chainId, eth_getBalance, eth_getTransactionByHash,\neth_getTransactionReceipt, eth_call, eth_estimateGas,\neth_sendRawTransaction, eth_getLogs. Arbitrum-specific methods include\narb_getL1Confirmations and various nodeinterface precompile calls.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
