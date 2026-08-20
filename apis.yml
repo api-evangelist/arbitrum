@@ -134,6 +134,11 @@ apis:
   - Stylus
   - SDK
   - Rust
+  - Wasm
+  tags_raw:
+  - Stylus
+  - SDK
+  - Rust
   - WASM
   properties:
   - type: Documentation
@@ -181,6 +186,9 @@ apis:
   humanURL: https://arbiscan.io
   baseURL: https://api.arbiscan.io/api
   tags:
+  - Block Explorer
+  - Arbiscan
+  tags_raw:
   - Block Explorer
   - Arbiscan
   - API
