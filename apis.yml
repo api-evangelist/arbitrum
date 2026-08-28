@@ -10,6 +10,19 @@ description: >-
   standard Ethereum JSON-RPC, the Stylus SDK for Rust / C / C++ smart contracts, the
   Arbitrum SDK for cross-chain messaging and bridging, and the Arbitrum Bridge for
   canonical asset transfer between Ethereum and Arbitrum chains.
+deliveryModel:
+  model: self-hosted
+  license: Apache-2.0
+  open_source: true
+  commercial: false
+  callable_host: true
+  label: Self-hosted open source · you run it yourself
+  confidence: high
+  source:
+  - license
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: free
   onboarding: unknown
