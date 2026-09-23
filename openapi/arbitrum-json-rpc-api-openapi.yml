@@ -1,33 +1,11 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Arbitrum JSON-RPC API
+  title: Arbitrum JSON RPC API
   version: 1.0.0
   summary: Best-effort OpenAPI for the public Arbitrum JSON-RPC endpoints.
   description: 'Public JSON-RPC endpoints for the Arbitrum One, Arbitrum Nova, and Arbitrum
 
-    Sepolia chains. The Arbitrum chains implement the standard Ethereum JSON-RPC
-
-    interface (eth_*, net_*, web3_*) and add Arbitrum-specific precompiles and
-
-    extended methods (arb_*, arbtrace_*, debug_*).
-
-
-    All requests are POST with a JSON body following the JSON-RPC 2.0 envelope.
-
-    Public RPC endpoints do not support WebSockets and IPv6 is not supported.
-
-    Sequencer-only endpoints accept only eth_sendRawTransaction and
-
-    eth_sendRawTransactionConditional.
-
-
-    This spec is a best-effort generation from public docs. See
-
-    https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers
-
-    for the source list.
-
-    '
+    Sepolia chains.'
   contact:
     name: Offchain Labs / Arbitrum Foundation
     url: https://docs.arbitrum.io/
@@ -58,9 +36,7 @@ paths:
 
         eth_sendRawTransaction, eth_getLogs. Arbitrum-specific methods include
 
-        arb_getL1Confirmations and various nodeinterface precompile calls.
-
-        '
+        arb_getL1Confirmations and various nodeinterface precompile calls.'
       operationId: jsonRpcCall
       requestBody:
         required: true
@@ -115,33 +91,6 @@ paths:
           description: Internal RPC error
 components:
   schemas:
-    JsonRpcResponse:
-      type: object
-      required:
-      - jsonrpc
-      properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id:
-          oneOf:
-          - type: integer
-          - type: string
-          - type: 'null'
-        result: {}
-        error:
-          $ref: '#/components/schemas/JsonRpcError'
-    JsonRpcError:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        data: {}
     JsonRpcRequest:
       type: object
       required:
@@ -167,3 +116,30 @@ components:
         params:
           type: array
           items: {}
+    JsonRpcError:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data: {}
+    JsonRpcResponse:
+      type: object
+      required:
+      - jsonrpc
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id:
+          oneOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+        result: {}
+        error:
+          $ref: '#/components/schemas/JsonRpcError'
