@@ -91,22 +91,6 @@ paths:
           description: Internal RPC error
 components:
   schemas:
-    JsonRpcResponse:
-      type: object
-      required:
-      - jsonrpc
-      properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id:
-          oneOf:
-          - type: integer
-          - type: string
-          - type: 'null'
-        result: {}
-        error:
-          $ref: '#/components/schemas/JsonRpcError'
     JsonRpcRequest:
       type: object
       required:
@@ -132,6 +116,22 @@ components:
         params:
           type: array
           items: {}
+    JsonRpcResponse:
+      type: object
+      required:
+      - jsonrpc
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id:
+          oneOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+        result: {}
+        error:
+          $ref: '#/components/schemas/JsonRpcError'
     JsonRpcError:
       type: object
       required:
