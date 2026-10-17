@@ -91,31 +91,6 @@ paths:
           description: Internal RPC error
 components:
   schemas:
-    JsonRpcRequest:
-      type: object
-      required:
-      - jsonrpc
-      - method
-      properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id:
-          oneOf:
-          - type: integer
-          - type: string
-          - type: 'null'
-        method:
-          type: string
-          examples:
-          - eth_blockNumber
-          - eth_chainId
-          - eth_getBalance
-          - eth_call
-          - eth_sendRawTransaction
-        params:
-          type: array
-          items: {}
     JsonRpcResponse:
       type: object
       required:
@@ -143,3 +118,28 @@ components:
         message:
           type: string
         data: {}
+    JsonRpcRequest:
+      type: object
+      required:
+      - jsonrpc
+      - method
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id:
+          oneOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+        method:
+          type: string
+          examples:
+          - eth_blockNumber
+          - eth_chainId
+          - eth_getBalance
+          - eth_call
+          - eth_sendRawTransaction
+        params:
+          type: array
+          items: {}
